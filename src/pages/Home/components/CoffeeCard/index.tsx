@@ -1,5 +1,9 @@
+import { ShoppingCart } from "phosphor-react";
+import { QuantityInput } from "../../../../components/QuantityInput";
 import { RegularText, TitleText } from "../../../../components/Typography";
+import { formatMoney } from "../../../../utils/formatMoney";
 import {
+  AddCartWrapper,
   CardFooter,
   CoffeeCardContainer,
   Description,
@@ -7,32 +11,49 @@ import {
   Title,
 } from "./styles";
 
-export function CoffeeCard() {
+export interface Coffee {
+  id: number;
+  tags: string[];
+  name: string;
+  description: string;
+  photo: string;
+  price: number;
+}
+
+interface CoffeeCardProps {
+  coffee: Coffee;
+}
+
+export function CoffeeCard({ coffee }: CoffeeCardProps) {
+  const formattedPrice = formatMoney(coffee.price);
+
   return (
     <CoffeeCardContainer>
-      <img
-        src="https://s3-alpha-sig.figma.com/img/55b1/f9ee/64600f98b2bae456b96fdc624c4b4f47?Expires=1684108800&Signature=o303I8LfojKT9k7mJy9GxNbDvwvh5RfdQqsUz5EUCT9kLcBh64NkSp228A7yinLzxPwhRagEuSC85tx4l8wjgsMziJ0njQbvktC1iaOJkVpe6yooT5gyI~hyzRsXXJn2oOKJWPd5J2mcEOTYK~MhbZz0uMgLoJrw769GqDV8JVXN7Lxgl~V3phH0o~HHcI8ysVeWfiCgoZzLpiBYjoQ38uL6bCmp2TlxnrLUl8UzM63nyPZFxH2Oxk6FegRnKV4y4QNXdwouYOx--WGcFBY757nmaiembx5zbDNla6rabqRSGa6rGS0RHktLQowWODoxGOS1Fi4h29MyMsqip3SweQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"
-        alt="Café"
-      />
+      <img src={`/coffees/${coffee.photo}`} alt={coffee.name} />
 
       <Tags>
-        <span>tradicional</span>
-        <span>com leite</span>
+        {coffee.tags.map((tag) => (
+          <span key={`${coffee.id}${tag}`}>{tag}</span>
+        ))}
       </Tags>
 
-      <Title>Espresso Tradicional</Title>
+      <Title>{coffee.name}</Title>
 
-      <Description>
-        O tradicional café feito com água quente e grãos moídos
-      </Description>
+      <Description>{coffee.description}</Description>
 
       <CardFooter>
         <div>
           <RegularText size="s">R$</RegularText>
           <TitleText size="m" color="text" as="strong">
-            4,50
+            {formattedPrice}
           </TitleText>
         </div>
+        <AddCartWrapper>
+          <QuantityInput />
+          <button>
+            <ShoppingCart size={22} weight="fill" />
+          </button>
+        </AddCartWrapper>
       </CardFooter>
     </CoffeeCardContainer>
   );
