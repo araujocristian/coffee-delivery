@@ -1,4 +1,6 @@
 import { TitleText } from "../../../../components/Typography";
+import { CartCard } from "../CartCard";
+import { ConfirmationSection } from "./ConfirmationSection";
 import { CartSectionContainer, DetailsContainer } from "./styles";
 
 export function CartSection() {
@@ -9,7 +11,11 @@ export function CartSection() {
       </TitleText>
 
       <DetailsContainer>
-        <p>items</p>
+        <CartCard />
+        <CartCard />
+        <CartCard />
+
+        <ConfirmationSection />
       </DetailsContainer>
     </CartSectionContainer>
   );
