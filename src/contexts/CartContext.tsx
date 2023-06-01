@@ -8,6 +8,7 @@ export interface CartItem extends Coffee {
 interface CartContextType {
   cartItens: CartItem[];
   cartQuantity: number;
+  cartItensTotal: number;
   addCoffeeToCart: (coffee: CartItem) => void;
   changeCartItemQuantity: (
     cartItemId: number,
@@ -27,6 +28,10 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
 
   const cartQuantity = cartItens.reduce((acc, item) => {
     return acc + item.quantity;
+  }, 0);
+
+  const cartItensTotal = cartItens.reduce((acc, item) => {
+    return acc + item.quantity * item.price;
   }, 0);
 
   function addCoffeeToCart(coffee: CartItem) {
@@ -79,6 +84,7 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
       value={{
         cartItens,
         cartQuantity,
+        cartItensTotal,
         addCoffeeToCart,
         changeCartItemQuantity,
         removeCartItem,
