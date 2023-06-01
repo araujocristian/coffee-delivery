@@ -1,9 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import * as zod from "zod";
 import { CartSection } from "./components/CartSection";
 import { CompleteOrderForm } from "./components/CompleteOrderForm";
 import { CompleteOrderContainer } from "./styles";
+
+enum PaymentMethods {
+  CREDIT_CARD = "CREDIT_CARD",
+  DEBIT_CARD = "DEBIT_CARD",
+  MONEY = "MONEY",
+}
 
 const confirmOrderFormValidationSchema = zod.object({
   cep: zod.string().min(8, "CEP inválido").max(8, "CEP inválido"),
@@ -13,6 +20,11 @@ const confirmOrderFormValidationSchema = zod.object({
   neighborhood: zod.string().min(3, "Bairro inválido"),
   city: zod.string().min(3, "Cidade inválida"),
   uf: zod.string().min(2, "UF inválido"),
+  paymentMethod: zod.nativeEnum(PaymentMethods, {
+    errorMap: () => {
+      return { message: "Informe o método de pagamento" };
+    },
+  }),
 });
 
 export type OrderData = zod.infer<typeof confirmOrderFormValidationSchema>;
@@ -22,10 +34,14 @@ export function CompleteOrderPage() {
     resolver: zodResolver(confirmOrderFormValidationSchema),
   });
 
+  const navigate = useNavigate();
+
   const { handleSubmit } = confirmOrderForm;
 
   function handleConfirmOrder(data: OrderData) {
-    console.log(data);
+    navigate("/orderConfirmed", {
+      state: data,
+    });
   }
 
   return (
