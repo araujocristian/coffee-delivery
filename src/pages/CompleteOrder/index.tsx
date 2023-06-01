@@ -7,6 +7,12 @@ import { CompleteOrderContainer } from "./styles";
 
 const confirmOrderFormValidationSchema = zod.object({
   cep: zod.string().min(8, "CEP inválido").max(8, "CEP inválido"),
+  street: zod.string().min(3, "Rua inválida"),
+  number: zod.string().min(1, "Número inválido"),
+  complement: zod.string(),
+  neighborhood: zod.string().min(3, "Bairro inválido"),
+  city: zod.string().min(3, "Cidade inválida"),
+  uf: zod.string().min(2, "UF inválido"),
 });
 
 export type OrderData = zod.infer<typeof confirmOrderFormValidationSchema>;
