@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as zod from "zod";
+import { useCart } from "../../hooks/useCart";
 import { CartSection } from "./components/CartSection";
 import { CompleteOrderForm } from "./components/CompleteOrderForm";
 import { CompleteOrderContainer } from "./styles";
@@ -30,6 +31,8 @@ const confirmOrderFormValidationSchema = zod.object({
 export type OrderData = zod.infer<typeof confirmOrderFormValidationSchema>;
 
 export function CompleteOrderPage() {
+  const { clearCart } = useCart();
+
   const confirmOrderForm = useForm<OrderData>({
     resolver: zodResolver(confirmOrderFormValidationSchema),
   });
@@ -42,6 +45,8 @@ export function CompleteOrderPage() {
     navigate("/orderConfirmed", {
       state: data,
     });
+
+    clearCart();
   }
 
   return (
